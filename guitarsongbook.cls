@@ -126,12 +126,44 @@
 \fi
 
 
-% helper commands
+% helper commands, easier definitions
 \newcommand{\verseskip}{\par\vspace{0.5\baselineskip}}
 \newcommand{\chordcorrection}{\vspace{-0.5\baselineskip}\brk}
 \newcommand{\chord}[1]{\textsc{\textbf{#1}}}
 \newcommand{\chords}[1]{\nolyrics #1}
 
-\newenvironment{intro}{\beginverse*\textnote{Intro}\nolyrics}{\vspace{-0.5\baselineskip}\endverse}
+\newenvironment{solo}[1]{%
+  \beginverse*
+  \musicnote{#1}
+  \vspace{-0.3\baselineskip}
+  \nolyrics
+}{%
+  \vspace{-0.3\baselineskip}
+  \endverse
+}
+
+\pgfkeys{/gsb/tabsheading/.initial={Verwendete Akkorde:}}
+\newenvironment{tabs}{%
+  \beginverse*
+  \musicnote{\pgfkeysvalueof{/gsb/tabsheading}}
+  %\vspace{-0.3\baselineskip}
+}{%
+  \vspace{-0.3\baselineskip}
+  \endverse
+}
+
+\newcommand{\lrepeat}{\ensuremath{\lVert:}}
+\newcommand{\rrepeat}{\ensuremath{:\rVert}}
+
+
+\pgfkeys{/gsb/chorusheading/.initial={Refrain:}}
+\let\@oldbeginchorus\beginchorus
+\let\@oldendchorus\endchorus
+\renewenvironment{chorus}{%
+  \@oldbeginchorus
+  \musicnote{\pgfkeysvalueof{/gsb/chorusheading}}
+}{%
+  \@oldendchorus
+}
 
 \endinput
