@@ -1,7 +1,11 @@
-\documentclass[authorindex=false,printa5]{../../guitarsongbook}
+\documentclass[printa5, authorindex]{../../guitarsongbook}
 
 \begin{document}
+%% we can change defaults by setting the respective pgf keys:
+\pgfkeyssetvalue{/gsb/authorindextitle}{Autoren}
 
+%% title and author indices are created automatically; this can also be controlled by the 
+%% `authorindex' class option.
 \maketitleindex
 \makeauthorindex
 
@@ -9,10 +13,9 @@
 
 \beginsong{House of the rising Sun}[by={Traditional}]
  
-\beginverse*
-\textnote{Intro}
+\begin{intro}
 \[Am] \[C] \[D] \[F] \[Am] \[C] \[E7]
-\endverse
+\end{intro}
 
 \beginverse\memorize
 There i\[Am]s a h\[C]ouse in \[D]New Or\[F]leans
