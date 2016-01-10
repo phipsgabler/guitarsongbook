@@ -152,10 +152,20 @@
 \newcommand{\gsb@beginchorus}{\@beginchorus\replay[chorus]}
 \long\def\gsb@namedchorus[#1]{%
   \gsb@beginchorus
-  \musicnote{#1:}
+  \musicnote{#1}
 }
 \renewcommand{\beginchorus}{%
   \@ifnextchar[{\gsb@namedchorus}{\gsb@beginchorus}
+}
+\renewenvironment{chorus}[1][]{%
+  \def\param{#1}
+  \ifx\param\@empty
+    \gsb@beginchorus
+  \else
+    \gsb@namedchorus[#1]
+  \fi
+}{%
+  \SB@endchorus
 }
 
 % Numbered verses are automatically memorized
@@ -181,6 +191,7 @@
   \gsb@beginchorus\memorize[chorus]
   \musicnote{\pgfkeysvalueof{/gsb/chorusheading}:}
 }
+\newenvironment{firstchorus}{\beginfirstchorus}{\@endchorus}
 
 % unnumbered verse, suited for putting tabs into it
 \pgfkeys{/gsb/tabsheading/.initial={Verwendete Akkorde:}}

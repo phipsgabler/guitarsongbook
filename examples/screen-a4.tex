@@ -29,74 +29,75 @@
 \[Am] \[C] \[D] \[F] \[Am] \[C] \[E7]
 \end{instrumental}
 
-\beginverse
+\begin{verse}
 There i\[Am]s a h\[C]ouse in \[D]New Or\[F]leans
 They \[Am]call the R\[C]ising \[E7]Sun, \[E7]
 And it's \[Am]been the ru\[C]in of m\[D]any a poor \[F]boy.
 And \[Am]God, I \[E]know I'm \[Am]one. \[E7]
-\endverse
+\end{verse}
 
-\beginverse
+\begin{verse}
 My ^mother ^was a ^tailor. ^
 She s^ewed my ^new blue ^jeans. ^
 My ^father ^was a g^amblin' ^man
 ^Down in ^New Or^leans. ^
-\endverse
+\end{verse}
 
 \begin{instrumental}{Interludium}
 \[Am] \[C] \[D] \[F] \[Am] \[C] \[E7]
 \end{instrumental}
 
-\beginverse
+\begin{verse}
 Now the ^only ^thing a ^gambler ^needs
 Is a ^suitcase ^and a ^trunk. ^
 And the ^only ^time that ^he is satis^fied,
 Is ^when he ^is all ^drunk. ^
-\endverse
+\end{verse}
 
 
 %% The first chorus is special in that it contains a "header" and sets up
 %% the memorization register "chorus" for subsequent choruses. The header can be 
 %% customized via the pgf key "/gsb/chorusheading".
-\beginfirstchorus
+\begin{firstchorus} % or: \beginfirstchorus
 There i\[Am]s a h\[C]ouse in \[D]New Or\[F]leans
 They \[Am]call the R\[C]ising \[E7]Sun, \[E7]
 And it's \[Am]been the ru\[C]in of m\[D]any a poor \[F]boy.
 And \[Am]God, I \[E]know I'm \[Am]one. \[E7]
-\endchorus
+\end{firstchorus} % or: \endchorus
 
-\beginverse
+
+\begin{verse}
 With ^one foot ^on the ^platform ^
 And the ^other ^on the ^train, ^
 I'm ^going ^back to ^New Or^leans
 To ^wear that ^ball and ^chain. ^
-\endverse
+\end{verse}
 
 %% To just repeat the main chorus, we can use this:
 \repeatchorus
 
 %% The macros `\lrepeat` and `\rrepeat` produce a left and right repeat sign
-\beginverse
+\begin{verse}
 \lrepeat{} There i\[Am]s a h\[C]ouse in \[D]New Or\[F]leans
 They \[Am]call the \[C]Rising \[E7]Sun, \[E7]
 And it's \[Am]been the \[C]ruin of \[D]many a poor \[F]boy.
 And \[Am]god, I \[E7]know I'm \[Am]one. \rrepeat{}
-\endverse
+\end{verse}
  
-\beginchorus
+\begin{chorus}
 Oh ^mother ^tell your ^children ^
 Not to ^do what ^I have ^done, ^
 To ^spend your ^life in ^sin and mise^ry
 In the ^House of the ^Rising ^Sun. ^
-\endchorus
+\end{chorus}
 
 %% A chorus which is not the first one can also optionally be given a header:
-\beginchorus[Auch ein Refrain]
+\begin{chorus}[Auch ein Refrain:]
 Oh ^mother ^tell your ^children ^
 Not to ^do what ^I have ^done, ^
 To ^spend your ^life in ^sin and mise^ry
 In the ^House of the ^Rising ^Sun. ^
-\endchorus
+\end{chorus}
 
 \end{song}
 
