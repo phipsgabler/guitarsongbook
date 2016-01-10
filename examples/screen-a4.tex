@@ -1,11 +1,13 @@
 \documentclass[screena4, authorindex]{../guitarsongbook}
+\usepackage[utf8]{inputenc}
 
 \begin{document}
-%% we can change defaults by setting the respective pgf keys:
+%% Default values can be changed by setting the respective pgf keys:
 \pgfkeyssetvalue{/gsb/authorindextitle}{Autoren}
 
-%% title and author indices are created automatically; this can also be controlled by the 
-%% `authorindex' class option.
+%% Title and author indices are created automatically; this can also be controlled by the 
+%% `authorindex' class option. You need to run the songindex program to get something
+%% out of this!
 \maketitleindex
 \makeauthorindex
 
@@ -13,7 +15,8 @@
 
 \begin{song}{House of the rising Sun}[by={Traditional}]
  
-%% here, we can set chords which 
+%% Here, we can set chords which are used in the piece. The heading text  be 
+%% customized via the pgf key "/gsb/tabsheading".
 \begin{tabs}
 \gtab{Am}{X03320} \gtab{C}{X32010} \gtab{G}{320003}
 \gtab{F}{144311} \gtab{E7}{030200}
@@ -51,6 +54,10 @@ And the ^only ^time that ^he is satis^fied,
 Is ^when he ^is all ^drunk. ^
 \endverse
 
+
+%% The first chorus is special in that it contains a "header" and sets up
+%% the memorization register "chorus" for subsequent choruses. The header can be 
+%% customized via the pgf key "/gsb/chorusheading".
 \beginfirstchorus
 There i\[Am]s a h\[C]ouse in \[D]New Or\[F]leans
 They \[Am]call the R\[C]ising \[E7]Sun, \[E7]
@@ -65,8 +72,10 @@ I'm ^going ^back to ^New Or^leans
 To ^wear that ^ball and ^chain. ^
 \endverse
 
+%% To just repeat the main chorus, we can use this:
 \repeatchorus
 
+%% The macros `\lrepeat` and `\rrepeat` produce a left and right repeat sign
 \beginverse
 \lrepeat{} There i\[Am]s a h\[C]ouse in \[D]New Or\[F]leans
 They \[Am]call the \[C]Rising \[E7]Sun, \[E7]
@@ -81,6 +90,7 @@ To ^spend your ^life in ^sin and mise^ry
 In the ^House of the ^Rising ^Sun. ^
 \endchorus
 
+%% A chorus which is not the first one can also optionally be given a header:
 \beginchorus[Auch ein Refrain]
 Oh ^mother ^tell your ^children ^
 Not to ^do what ^I have ^done, ^
@@ -89,6 +99,78 @@ In the ^House of the ^Rising ^Sun. ^
 \endchorus
 
 \end{song}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This example is just for comparison -- it shows how the above effects would be achieved with the
+% original songs syntax, and that the new macros are backwards compatible:
+
+\beginsong{Arschblender}[%
+  by={Links\ Rechts\ Hilfe}]
+
+\beginverse*
+\musicnote{Verwendete Akkorde:}
+\gtab{E7}{022130} \gtab{A}{X02220} \gtab{A7}{X02223}
+\gtab{B7*}{7:131211} \gtab{A7*}{5:131211}
+\musicnote{Intro:}
+\[E E7 Asus4 A7] \chordcorrection
+\endverse
+
+\beginverse\memorize
+\[E] Und jetzt \[E7]steh ich hier \brk am \[A]Häusl rum, \[A7]
+\[E] um \[E7]mich sind lauter \brk \[A]Bräute rum, \[A7]
+\[E] und ich \[E7]trage meine \brk \[A]Rockstar-Socken. \[A7]
+\[E] Und \[E7]heute werd ich \brk \[A]richtig rocken \[A7]
+\endverse
+
+\beginchorus
+\musicnote{Refrain:}
+Denn die \[B7*]Sonne scheint mir \brk aus dem \[A7*]Arsch!
+die \[B7*]Sonne scheint mir \brk aus dem \[A7*]Arsch,
+und es geht mir so gut.
+Ich bin ein \[E]Arschblender, \brk \[E7] ein Ver\[A]blendeter, \[A7]
+ohh -- ein echter \[E]Arschblender. \[E7]
+\[A]Fünftausend Megawatt \[A7]Sonnenlicht \brk aus dem {\[E E7]A}rsch; \[A A7]
+aus dem \[E]Arsch. \[E7 A A7 G]
+\endchorus
+
+\beginverse
+^ Und ^manche haben \brk ein ^Arschgeweih, ^
+^ und ^manche haben ^zwei \brk \echo{oder ^drei!}
+^ Und ^manche haben \brk einen ^Nasenring; ^
+^ wer ^weiss, wo der \brk da^vor schon hing? ^
+\endverse
+
+\beginverse*
+\musicnote{(Refrain)}
+\endverse
+
+\beginverse
+^ Und ^manche machen \brk ^fette Beute; ^
+^ das ^sind nicht immer \brk ^nette Leute. ^
+^ Und ^manche haben so \brk ^ihre Macken, ^
+^ und ^meine ist es, \brk ^Licht zu kacken! ^
+\endverse
+
+\beginverse*
+\musicnote{(Refrain)}
+\musicnote{(Kazoo-Solo, mit \chord{E-E7-A-A7} begleitet)}
+\chordcorrection
+\endverse
+
+\beginverse*
+Die \[E]Sonne scheint mir, \brk die \[E7]Sonne scheint mir,
+die \[A]Sonne scheint mir \brk aus dem \[A7]A-arsch!
+\[E]Na na na na, \[E7]da da da da, \brk \[A]di di di da \[A7]da da\ldots
+Die \[E]Sonne scheint mir, \brk die \[E7]Sonne scheint mir,
+die \[A]Sonne scheint mir \brk aus dem \[A7]A-arsch!
+\[E]Na na na na, \[E7]da da da da, \brk \[A]di di di da \[A7]da da\ldots
+\endverse
+
+\beginverse*
+\musicnote{(Refrain)}
+\endverse
+
+\endsong
 
 \end{songs}
 

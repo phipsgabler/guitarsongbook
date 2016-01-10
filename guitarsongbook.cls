@@ -140,15 +140,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % modifications and extensions of verse and chord commands
 
-\let\@beginverse\beginverse
-\let\@endverse\endverse
+% original top level (non-internal) definitions:
 \let\@beginchorus\beginchorus
 \let\@endchorus\endchorus
+\let\@beginverse\beginverse
+\let\@endverse\endverse
 
 
-
-
-% An optional "header" for choruses
+% The chorus environment gets an optional "header", and automatic
+% replay of the chords of the first chorus
 \newcommand{\gsb@beginchorus}{\@beginchorus\replay[chorus]}
 \long\def\gsb@namedchorus[#1]{%
   \gsb@beginchorus
@@ -158,10 +158,20 @@
   \@ifnextchar[{\gsb@namedchorus}{\gsb@beginchorus}
 }
 
+% Numbered verses are automatically memorized
 \renewcommand{\beginverse}{%
-  \@beginverse\memorize
-  %\@ifnextchar*{\@beginverse*\memorize[verse]}{\@beginverse\memorize[verse]}
+  \begingroup%
+    \SB@loadactives%
+    \@ifstar{\endgroup\vnumberedfalse\SB@beginverse}%
+            {\endgroup\vnumberedtrue\SB@beginverse\memorize}%
 }
+\renewenvironment{verse}
+  {\vnumberedtrue\SB@beginverse\memorize}
+  {\SB@endverse}
+\renewenvironment{verse*}
+  {\vnumberedfalse\SB@beginverse}
+  {\SB@endverse}
+
 
 % Some convenience commands for common use cases:
 
