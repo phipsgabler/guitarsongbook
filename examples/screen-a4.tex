@@ -1,3 +1,5 @@
+%% As arguments to the class we can specify the output format, and whether the indices should be
+%% typeset.
 \documentclass[screena4, authorindex]{../guitarsongbook}
 \usepackage[utf8]{inputenc}
 
@@ -5,9 +7,8 @@
 %% Default values can be changed by setting the respective pgf keys:
 \pgfkeyssetvalue{/gsb/authorindextitle}{Autoren}
 
-%% Title and author indices are created automatically; this can also be controlled by the 
-%% `authorindex' class option. You need to run the songindex program to get something
-%% out of this!
+%% Title and author indices are created automatically; this can also be controlled by the
+%% `authorindex' class option. You need to run the songindex program to get something out of this!
 \maketitleindex
 \makeauthorindex
 
@@ -15,16 +16,15 @@
 
 \begin{song}{House of the rising Sun}[by={Traditional}]
  
-%% Here, we can set chords which are used in the piece. The heading text  be 
-%% customized via the pgf key "/gsb/tabsheading".
+%% Here, we can set chords which are used in the piece. The heading text be customized via the pgf
+%% key "/gsb/tabsheading".
 \begin{tabs}
 \gtab{Am}{X03320} \gtab{C}{X32010} \gtab{G}{320003}
 \gtab{F}{144311} \gtab{E7}{030200}
 \end{tabs}
 
-%% In this environment, we can write instrumental parts;
-%% chords are set on the baseline, so this isn't thought for
-%% setting lyrics.
+%% In this environment, we can write instrumental parts; chords are set on the baseline, so this
+%% isn't thought for setting lyrics.
 \begin{instrumental}{Intro}
 \[Am] \[C] \[D] \[F] \[Am] \[C] \[E7]
 \end{instrumental}
@@ -55,9 +55,9 @@ Is ^when he ^is all ^drunk. ^
 \end{verse}
 
 
-%% The first chorus is special in that it contains a "header" and sets up
-%% the memorization register "chorus" for subsequent choruses. The header can be 
-%% customized via the pgf key "/gsb/chorusheading".
+%% The first chorus is special in that it contains a "header" and sets up the memorization register
+%% "chorus" for subsequent choruses. The header can be customized via the pgf key
+%% "/gsb/chorusheading".
 \begin{firstchorus} % or: \beginfirstchorus
 There i\[Am]s a h\[C]ouse in \[D]New Or\[F]leans
 They \[Am]call the R\[C]ising \[E7]Sun, \[E7]
