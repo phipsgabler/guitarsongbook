@@ -1,6 +1,7 @@
 % guitarsongbook.sty
 % Songbooks with guitar chords, based on the songs package
 % Philipp Gabler, 2015
+
 \ProvidesClass{guitarsongbook}[2015/12/27 v1.0 Songbooks with guitar chords]
 \NeedsTeXFormat{LaTeX2e}
 
@@ -132,38 +133,73 @@
 \newcommand{\chord}[1]{\textsc{\textbf{#1}}}
 \newcommand{\chords}[1]{\nolyrics #1}
 
-\newenvironment{solo}[1]{%
-  \beginverse*
+
+\newcommand{\lrepeat}{\ensuremath{\lVert:}}
+\newcommand{\rrepeat}{\ensuremath{:\rVert}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% modifications and extensions of verse and chord commands
+
+\let\@beginverse\beginverse
+\let\@endverse\endverse
+\let\@beginchorus\beginchorus
+\let\@endchorus\endchorus
+
+
+
+
+% An optional "header" for choruses
+\newcommand{\gsb@beginchorus}{\@beginchorus\replay[chorus]}
+\long\def\gsb@namedchorus[#1]{%
+  \gsb@beginchorus
+  \musicnote{#1:}
+}
+\renewcommand{\beginchorus}{%
+  \@ifnextchar[{\gsb@namedchorus}{\gsb@beginchorus}
+}
+
+\renewcommand{\beginverse}{%
+  \@beginverse\memorize
+  %\@ifnextchar*{\@beginverse*\memorize[verse]}{\@beginverse\memorize[verse]}
+}
+
+% Some convenience commands for common use cases:
+
+% automatically give default header to chorus
+\pgfkeys{/gsb/chorusheading/.initial={Refrain}}
+\newcommand{\beginfirstchorus}{
+  \gsb@beginchorus\memorize[chorus]
+  \musicnote{\pgfkeysvalueof{/gsb/chorusheading}:}
+}
+
+% unnumbered verse, suited for putting tabs into it
+\pgfkeys{/gsb/tabsheading/.initial={Verwendete Akkorde:}}
+\newenvironment{tabs}{%
+  \@beginverse*
+  \musicnote{\pgfkeysvalueof{/gsb/tabsheading}}
+  %\vspace{-0.3\baselineskip}
+}{%
+  \vspace{-0.3\baselineskip}
+  \@endverse
+}
+
+% unnumbered verse, suited for putting only chords into it
+\newenvironment{instrumental}[1]{%
+  \@beginverse*
   \musicnote{#1}
   \vspace{-0.3\baselineskip}
   \nolyrics
 }{%
   \vspace{-0.3\baselineskip}
-  \endverse
+  \@endverse
 }
 
-\pgfkeys{/gsb/tabsheading/.initial={Verwendete Akkorde:}}
-\newenvironment{tabs}{%
-  \beginverse*
-  \musicnote{\pgfkeysvalueof{/gsb/tabsheading}}
-  %\vspace{-0.3\baselineskip}
-}{%
-  \vspace{-0.3\baselineskip}
-  \endverse
-}
-
-\newcommand{\lrepeat}{\ensuremath{\lVert:}}
-\newcommand{\rrepeat}{\ensuremath{:\rVert}}
-
-
-\pgfkeys{/gsb/chorusheading/.initial={Refrain:}}
-\let\@oldbeginchorus\beginchorus
-\let\@oldendchorus\endchorus
-\renewenvironment{chorus}{%
-  \@oldbeginchorus
-  \musicnote{\pgfkeysvalueof{/gsb/chorusheading}}
-}{%
-  \@oldendchorus
+% repeats with default chorus header
+\newcommand{\repeatchorus}{
+  \@beginverse*
+  \musicnote{(\pgfkeysvalueof{/gsb/chorusheading})}
+  \vspace{-0.5\baselineskip}
+  \@endverse
 }
 
 \endinput
