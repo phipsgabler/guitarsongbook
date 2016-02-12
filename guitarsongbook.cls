@@ -208,8 +208,10 @@
 \newenvironment{instrumental}[1]{%
   \@beginverse*
   \musicnote{#1}
-  \vspace{-0.3\baselineskip}
+  \vspace{-0.1\baselineskip}
   \nolyrics
+  \let\@oldbaselineskip\baselineskip
+  \setlength{\baselineskip}{0.6\@oldbaselineskip}
 }{%
   \vspace{-0.3\baselineskip}
   \@endverse
