@@ -25,8 +25,9 @@
 
 %% In this environment, we can write instrumental parts; chords are set on the baseline, so this
 %% isn't thought for setting lyrics.
-\begin{instrumental}{Intro}
-\[Am] \[C] \[D] \[F] \[Am] \[C] \[E7]
+\begin{instrumental}{Intro:}
+\[Am] \[C] \[D] \[F]
+\[Am] \[C] \[E7]
 \end{instrumental}
 
 \begin{verse}
@@ -66,7 +67,8 @@ And \[Am]God, I \[E]know I'm \[Am]one. \[E7]
 \end{firstchorus} % or: \endchorus
 
 
-\begin{verse}
+%% We can also give a verse a prefix:
+\begin{verse}[Vierte Strophe:]
 With ^one foot ^on the ^platform ^
 And the ^other ^on the ^train, ^
 I'm ^going ^back to ^New Or^leans
@@ -98,6 +100,16 @@ Not to ^do what ^I have ^done, ^
 To ^spend your ^life in ^sin and mise^ry
 In the ^House of the ^Rising ^Sun. ^
 \end{chorus}
+
+%% In case some text part contains no chords, the baseline can be reduced so that 
+%% the lines don't look so empty (and space is saved):
+\begin{verse*}[Keine Akkorde:]
+\singlespacing
+Oh mother tell your children 
+Not to do what I have done, 
+To spend your life in sin and misery
+In the House of the Rising Sun. 
+\end{verse*}
 
 \end{song}
 

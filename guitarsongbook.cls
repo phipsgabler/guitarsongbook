@@ -130,6 +130,11 @@
 % helper commands, easier definitions
 \newcommand{\verseskip}{\par\vspace{0.5\baselineskip}}
 \newcommand{\chordcorrection}{\vspace{-0.5\baselineskip}\brk}
+\newcommand{\singlespacing}{%
+  \let\@oldbaselineskip\baselineskip
+  \setlength{\baselineskip}{0.6\@oldbaselineskip}
+}
+
 \newcommand{\chord}[1]{\textsc{\textbf{#1}}}
 \newcommand{\chords}[1]{\nolyrics #1}
 
@@ -175,12 +180,25 @@
     \@ifstar{\endgroup\vnumberedfalse\SB@beginverse}%
             {\endgroup\vnumberedtrue\SB@beginverse\memorize}%
 }
-\renewenvironment{verse}
-  {\vnumberedtrue\SB@beginverse\memorize}
-  {\SB@endverse}
-\renewenvironment{verse*}
-  {\vnumberedfalse\SB@beginverse}
-  {\SB@endverse}
+\renewenvironment{verse}[1][]{
+  \def\param{#1}
+  \vnumberedtrue\SB@beginverse\memorize
+  \ifx\param\@empty\else
+    \musicnote{#1}
+  \fi
+}{%
+  \SB@endverse
+}
+
+\renewenvironment{verse*}[1][]{%
+  \def\param{#1}
+  \vnumberedfalse\SB@beginverse
+  \ifx\param\@empty\else
+    \musicnote{#1}
+  \fi
+}{
+  \SB@endverse
+}
 
 
 % Some convenience commands for common use cases:
@@ -208,8 +226,9 @@
 \newenvironment{instrumental}[1]{%
   \@beginverse*
   \musicnote{#1}
-  \vspace{-0.3\baselineskip}
+  \vspace{-0.1\baselineskip}
   \nolyrics
+  \singlespacing
 }{%
   \vspace{-0.3\baselineskip}
   \@endverse
@@ -219,7 +238,7 @@
 \newcommand{\repeatchorus}{
   \@beginverse*
   \musicnote{(\pgfkeysvalueof{/gsb/chorusheading})}
-  \vspace{-0.5\baselineskip}
+  \vspace{-0.4\baselineskip}
   \@endverse
 }
 
