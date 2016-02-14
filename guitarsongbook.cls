@@ -151,16 +151,42 @@
 \newchords{verse}
 \newchords{chorus}
 
+\newif\iffirstchorus
+\firstchorustrue
+\newif\iffirstverse
+\firstversetrue
+
 % The chorus environment gets an optional "header", and automatic
 % replay of the chords of the first chorus
-\newcommand{\gsb@beginchorus}{\@beginchorus\replay[chorus]}
+% automatically give default header to chorus, and memorize separately
+\pgfkeys{/gsb/chorusheading/.initial={Refrain}}
+
+\newcommand{\gsb@beginchorus}{%
+  \@beginchorus%
+  \iffirstchorus%
+    \memorize[chorus]%
+    \musicnote{\pgfkeysvalueof{/gsb/chorusheading}:}%
+  \else%
+    \replay[chorus]%
+  \fi%
+  \global\firstchorusfalse%
+}
 \long\def\gsb@namedchorus[#1]{%
-  \gsb@beginchorus
-  \musicnote{#1}
-  \replay[chorus]
+  \@beginchorus%
+  \iffirstchorus%
+    \memorize[chorus]%
+  \else%
+    \replay[chorus]%
+  \fi%
+  \global\firstchorusfalse%
+  \musicnote{#1}%
 }
 \renewcommand{\beginchorus}{%
-  \@ifnextchar[{\gsb@namedchorus}{\gsb@beginchorus}
+  \@ifnextchar[{%
+    \gsb@namedchorus%
+  }{%
+    \gsb@beginchorus%
+  }
 }
 \renewenvironment{chorus}[1][]{%
   \def\param{#1}
@@ -173,16 +199,26 @@
   \SB@endchorus
 }
 
+
 % Numbered verses are automatically memorized
 \renewcommand{\beginverse}{%
   \begingroup%
     \SB@loadactives%
-    \@ifstar{\endgroup\vnumberedfalse\SB@beginverse}%
-            {\endgroup\vnumberedtrue\SB@beginverse\memorize}%
+    \@ifstar{%
+      \endgroup\vnumberedfalse\SB@beginverse%
+    }{%
+      \endgroup\vnumberedtrue\SB@beginverse%
+    }%
 }
-\renewenvironment{verse}[1][]{
+\renewenvironment{verse}[1][]{%
   \def\param{#1}
-  \vnumberedtrue\SB@beginverse\memorize
+  \vnumberedtrue\SB@beginverse
+  \iffirstverse
+    \memorize[verse]
+  \else
+    \replay[verse]
+  \fi
+  \global\firstversefalse
   \ifx\param\@empty\else
     \musicnote{#1}
   \fi
@@ -202,14 +238,6 @@
 
 
 % Some convenience commands for common use cases:
-
-% automatically give default header to chorus, and memorize separately
-\pgfkeys{/gsb/chorusheading/.initial={Refrain}}
-\newcommand{\beginfirstchorus}{
-  \gsb@beginchorus\memorize[chorus]
-  \musicnote{\pgfkeysvalueof{/gsb/chorusheading}:}
-}
-\newenvironment{firstchorus}{\beginfirstchorus}{\@endchorus}
 
 % unnumbered verse, suited for putting tabs into it
 \pgfkeys{/gsb/tabsheading/.initial={Verwendete Akkorde:}}
@@ -238,7 +266,7 @@
 \newcommand{\repeatchorus}{
   \@beginverse*
   \musicnote{(\pgfkeysvalueof{/gsb/chorusheading})}
-  \vspace{-0.4\baselineskip}
+  \vspace{-0.5\baselineskip}
   \@endverse
 }
 
