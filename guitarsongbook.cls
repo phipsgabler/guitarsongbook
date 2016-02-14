@@ -101,10 +101,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COMMANDS
 
-% always provide default memoization registers
-\newchords{verse}
-\newchords{chorus}
-
 % indexing
 \pgfkeys{/gsb/titleindextitle/.initial=Songs}
 \newindex{titleidx}{songindex}
@@ -151,6 +147,9 @@
 \let\@beginverse\beginverse
 \let\@endverse\endverse
 
+% we always provide default memoization registers
+\newchords{verse}
+\newchords{chorus}
 
 % The chorus environment gets an optional "header", and automatic
 % replay of the chords of the first chorus
@@ -158,6 +157,7 @@
 \long\def\gsb@namedchorus[#1]{%
   \gsb@beginchorus
   \musicnote{#1}
+  \replay[chorus]
 }
 \renewcommand{\beginchorus}{%
   \@ifnextchar[{\gsb@namedchorus}{\gsb@beginchorus}
@@ -203,7 +203,7 @@
 
 % Some convenience commands for common use cases:
 
-% automatically give default header to chorus
+% automatically give default header to chorus, and memorize separately
 \pgfkeys{/gsb/chorusheading/.initial={Refrain}}
 \newcommand{\beginfirstchorus}{
   \gsb@beginchorus\memorize[chorus]
