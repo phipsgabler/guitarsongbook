@@ -2,7 +2,7 @@
 
 This document class is a wrapper above the [`songs` package](http://songs.sourceforge.net/) for setting song books.  It basically extends some existing commands from there and provides some "combinators" for setting things I often use, like instrumental solos, and mainly intended to be used to set songs with chords for guitar.
 
-Furthermore, it uses memoir to do some typographic improvements and relieves you from loading all packages "by hand".
+Furthermore, it puts everything into its own document class, which uses memoir to do some typographic improvements, and relieves you from loading all packages "by hand".
 
 For specific information, have a look at the [examples directory](./examples), or better yet, [the source](./guitarsongbook.cls).
 
@@ -30,7 +30,11 @@ As familiar as possible, if you're already used to the `songs` package:
 \end{document}
 ```
 
-It's just that everything should be easier ;)  For more detailed examples, see [examples](./examples).
+It's just that everything should be easier ;)  For more details, see [the examples](./examples).
+
+One thing to note is that I tried to make [chord memorization](http://songs.sourceforge.net/songsdoc/songs.html#sec5.4) (using `^` in subsequent verses or choruses) as seamless as possible by inserting automatic `\memorize` and `\replay` commands; if you recognize any errors with that, raise an issue, and I'll try to fix it.
+
+I've also tried to keep anything as backwards compatible as possible -- so you should be able to use the document class with the "native" `songs` commands as well (this compatibility should actually be quite well-tested, since I have a repository of songs in the "old" syntax as well).
 
 
 ## Installation ##
