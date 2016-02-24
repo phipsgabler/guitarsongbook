@@ -123,6 +123,20 @@
 \fi
 
 
+% add ability to add setup code to each song
+\def\gsb@songsetup{\@empty}
+\def\gsb@addtosongsetup#1{
+  \let\oldsongsetup=\gsb@songsetup
+  \gdef\gsb@songsetup{\oldsongsetup #1}
+}
+
+\let\oldSB@@@beginsong=\SB@@@beginsong
+\renewcommand{\SB@@@beginsong}{%
+  \oldSB@@@beginsong
+  \gsb@songsetup
+}
+
+
 % helper commands, easier definitions
 \newcommand{\verseskip}{\par\vspace{0.5\baselineskip}}
 \newcommand{\chordcorrection}{\vspace{-0.5\baselineskip}\brk}
@@ -155,6 +169,13 @@
 \firstchorustrue
 \newif\iffirstverse
 \firstversetrue
+
+\gsb@addtosongsetup{
+  \global\firstchorustrue
+  \global\firstversetrue
+}
+
+
 
 % The chorus environment gets an optional "header", and automatic
 % replay of the chords of the first chorus
