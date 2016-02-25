@@ -139,7 +139,8 @@
 
 % helper commands, easier definitions
 \newcommand{\verseskip}{\par\vspace{0.5\baselineskip}}
-\newcommand{\chordcorrection}{\vspace{-0.5\baselineskip}\brk}
+\newcommand{\spacecorrection}{\vspace{-0.5\baselineskip}}
+\newcommand{\chordcorrection}{\spacecorrection\brk}
 \newcommand{\singlespacing}{%
   \let\@oldbaselineskip\baselineskip
   \setlength{\baselineskip}{0.6\@oldbaselineskip}
@@ -200,59 +201,60 @@
     \replay[chorus]%
   \fi%
   \global\firstchorusfalse%
-  \musicnote{#1}%
-}
-\renewcommand{\beginchorus}{%
-  \@ifnextchar[{%
-    \gsb@namedchorus%
-  }{%
-    \gsb@beginchorus%
-  }
-}
-\renewenvironment{chorus}[1][]{%
   \def\param{#1}
-  \ifx\param\@empty
-    \gsb@beginchorus
-  \else
-    \gsb@namedchorus[#1]
-  \fi
+  \ifx\param\@empty\else\musicnote{#1}\fi%
+}
+% \renewcommand{\beginchorus}{%
+%   \@ifnextchar[{%
+%     \gsb@namedchorus%
+%   }{%
+%     \gsb@beginchorus%
+%   }
+% }
+\renewenvironment{chorus}[1][]{%
+  \def\param{#1}%
+  \ifx\param\@empty%
+    \gsb@beginchorus%
+  \else%
+    \gsb@namedchorus[#1]%
+  \fi%
 }{%
   \SB@endchorus
 }
 
 
-% Numbered verses are automatically memorized
-\renewcommand{\beginverse}{%
-  \begingroup%
-    \SB@loadactives%
-    \@ifstar{%
-      \endgroup\vnumberedfalse\SB@beginverse%
-    }{%
-      \endgroup\vnumberedtrue\SB@beginverse%
-    }%
-}
+% Automatic memoization in verse environments:
+% \renewcommand{\beginverse}{%
+%   \begingroup%
+%     \SB@loadactives%
+%     \@ifstar{%
+%       \endgroup\vnumberedfalse\SB@beginverse%
+%     }{%
+%       \endgroup\vnumberedtrue\SB@beginverse%
+%     }%
+% }
 \renewenvironment{verse}[1][]{%
-  \def\param{#1}
-  \vnumberedtrue\SB@beginverse
-  \iffirstverse
-    \memorize[verse]
-  \else
-    \replay[verse]
-  \fi
-  \global\firstversefalse
-  \ifx\param\@empty\else
-    \musicnote{#1}
-  \fi
+  \def\param{#1}%
+  \vnumberedtrue\SB@beginverse%
+  \iffirstverse%
+    \memorize[verse]%
+  \else%
+    \replay[verse]%
+  \fi%
+  \global\firstversefalse%
+  \ifx\param\@empty\else%
+    \musicnote{#1}%
+  \fi%
 }{%
   \SB@endverse
 }
 
 \renewenvironment{verse*}[1][]{%
-  \def\param{#1}
-  \vnumberedfalse\SB@beginverse
-  \ifx\param\@empty\else
-    \musicnote{#1}
-  \fi
+  \def\param{#1}%
+  \vnumberedfalse\SB@beginverse%
+  \ifx\param\@empty\else%
+    \musicnote{#1}%
+  \fi%
 }{
   \SB@endverse
 }
@@ -263,8 +265,8 @@
 % unnumbered verse, suited for putting tabs into it
 \pgfkeys{/gsb/tabsheading/.initial={Verwendete Akkorde:}}
 \newenvironment{tabs}{%
-  \@beginverse*
-  \musicnote{\pgfkeysvalueof{/gsb/tabsheading}}
+  \@beginverse*%
+  \musicnote{\pgfkeysvalueof{/gsb/tabsheading}}%
   %\vspace{-0.3\baselineskip}
 }{%
   \vspace{-0.3\baselineskip}
@@ -285,10 +287,10 @@
 
 % repeats with default chorus header
 \newcommand{\repeatchorus}{
-  \@beginverse*
+  %\@beginverse*
   \musicnote{(\pgfkeysvalueof{/gsb/chorusheading})}
-  \vspace{-0.5\baselineskip}
-  \@endverse
+  \spacecorrection
+  %\@endverse
 }
 
 \endinput

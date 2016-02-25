@@ -78,8 +78,10 @@ To ^wear that ^ball and ^chain. ^
 
 %% To just repeat the main chorus, we can use this:
 \repeatchorus
+%% Which actually just puts "(/gsb/chorusheading)" into a \musicnote.
 
 %% The macros `\lrepeat` and `\rrepeat` produce a left and right repeat sign
+%% (which looks a bit cleaner than the original \lrep and \rrep)
 \begin{verse}
 \lrepeat{} There i\[Am]s a h\[C]ouse in \[D]New Or\[F]leans
 They \[Am]call the \[C]Rising \[E7]Sun, \[E7]
@@ -102,7 +104,7 @@ To ^spend your ^life in ^sin and mise^ry
 In the ^House of the ^Rising ^Sun. ^
 \end{chorus}
 
-%% In case some text part contains no chords, the baseline can be reduced so that 
+%% In case some text part contains no chords, the line spacing can be reduced so that 
 %% the lines don't look so empty (and space is saved):
 \begin{verse*}[Keine Akkorde:]
 \singlespacing
@@ -130,6 +132,16 @@ In the House of the Rising Sun.
 \[E] Dann woch i \[A]auf \[D] \brk in der Ki\[G]nettn wo i \[E]schlof\ldots \[A]
 \end{verse}
 
+%% Here we see a bug: TeX says
+%%   ERROR: Missing $ inserted.
+%%   
+%%   --- TeX said ---
+%%   <inserted text> 
+%%                   $
+%%   l.136  ^
+%%           Die Tschuschn kumman und \brk i muaß mi ^schleichn sonst zagns mi an.
+%% without the {}; I probably messed up something with the active characters, and
+%% the empty group fixes that.
 \begin{verse}
 {} ^ Die Tschuschn kumman und \brk i muaß mi ^schleichn sonst zagns mi an.
 ^ So kreul i hoit ausse und  \brk putz ma in ^Dreck ab, so guat i kann.
@@ -203,9 +215,7 @@ aus dem \[E]Arsch. \[E7 A A7 G]
 ^ wer ^weiss, wo der \brk da^vor schon hing? ^
 \endverse
 
-\beginverse*
 \musicnote{(Refrain)}
-\endverse
 
 \beginverse
 ^ Und ^manche machen \brk ^fette Beute; ^
@@ -214,11 +224,11 @@ aus dem \[E]Arsch. \[E7 A A7 G]
 ^ und ^meine ist es, \brk ^Licht zu kacken! ^
 \endverse
 
-\beginverse*
-\musicnote{(Refrain)}
+%% Often, two things are too far away; we can use \spacecorrection to fix that
+%% (Which by default removes 0.5\baselineskip
+\musicnote{(Refrain)} 
+\spacecorrection
 \musicnote{(Kazoo-Solo, mit \chord{E-E7-A-A7} begleitet)}
-\chordcorrection
-\endverse
 
 \beginverse*
 Die \[E]Sonne scheint mir, \brk die \[E7]Sonne scheint mir,
@@ -229,9 +239,7 @@ die \[A]Sonne scheint mir \brk aus dem \[A7]A-arsch!
 \[E]Na na na na, \[E7]da da da da, \brk \[A]di di di da \[A7]da da\ldots
 \endverse
 
-\beginverse*
 \musicnote{(Refrain)}
-\endverse
 
 \endsong
 
