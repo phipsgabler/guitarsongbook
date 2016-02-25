@@ -67,7 +67,6 @@ And it's \[Am]been the ru\[C]in of m\[D]any a poor \[F]boy.
 And \[Am]God, I \[E]know I'm \[Am]one. \[Z]
 \end{chorus}
 
-
 %% We can also give a verse a prefix:
 \begin{verse}[Vierte Strophe:]
 With ^one foot ^on the ^platform ^
@@ -75,6 +74,7 @@ And the ^other ^on the ^train, ^
 I'm ^going ^back to ^New Or^leans
 To ^wear that ^ball and ^chain. ^
 \end{verse}
+%% Also, replaying chords independently from verses is automatically possible
 
 %% To just repeat the main chorus, we can use this:
 \repeatchorus
@@ -89,12 +89,11 @@ And it's \[Am]been the \[C]ruin of \[D]many a poor \[F]boy.
 And \[Am]god, I \[E7]know I'm \[Am]one. \rrepeat{}
 \end{verse}
  
-\begin{chorus}
-Oh ^mother ^tell your ^children ^
-Not to ^do what ^I have ^done, ^
-To ^spend your ^life in ^sin and mise^ry
-In the ^House of the ^Rising ^Sun. ^
-\end{chorus}
+%% We can add a number, if the chorus should be repeatedly repeated:
+\repeatchorus[2]
+\morespace
+%% And this is one of the few cases where we need to _add_ space
+%% (see below for \lessspace).
 
 %% A chorus which is not the first one can also optionally be given a header:
 \begin{chorus}[Auch ein Refrain:]
@@ -224,10 +223,10 @@ aus dem \[E]Arsch. \[E7 A A7 G]
 ^ und ^meine ist es, \brk ^Licht zu kacken! ^
 \endverse
 
-%% Often, two things are too far away; we can use \spacecorrection to fix that
-%% (Which by default removes 0.5\baselineskip
+%% Often, two things are too far away; we can use \lessspace to fix that
+%% (Which by default removes 0.5\baselineskip.)
 \musicnote{(Refrain)} 
-\spacecorrection
+\lessspace
 \musicnote{(Kazoo-Solo, mit \chord{E-E7-A-A7} begleitet)}
 
 \beginverse*

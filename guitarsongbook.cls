@@ -138,9 +138,10 @@
 
 
 % helper commands, easier definitions
-\newcommand{\verseskip}{\par\vspace{0.5\baselineskip}}
-\newcommand{\spacecorrection}{\vspace{-0.5\baselineskip}}
-\newcommand{\chordcorrection}{\spacecorrection\brk}
+\newcommand{\morespace}{\vspace{0.5\baselineskip}}
+\newcommand{\verseskip}{\par\morespace}
+\newcommand{\lessspace}{\vspace{-0.5\baselineskip}}
+\newcommand{\chordcorrection}{\lessspace\brk}
 \newcommand{\singlespacing}{%
   \let\@oldbaselineskip\baselineskip
   \setlength{\baselineskip}{0.6\@oldbaselineskip}
@@ -286,10 +287,14 @@
 }
 
 % repeats with default chorus header
-\newcommand{\repeatchorus}{
-  %\@beginverse*
-  \musicnote{(\pgfkeysvalueof{/gsb/chorusheading})}
-  \spacecorrection
+\newcommand{\repeatchorus}[1][]{
+  \def\param{#1}
+  \ifx\param\@empty
+    \musicnote{(\pgfkeysvalueof{/gsb/chorusheading})}
+  \else
+    \musicnote{(\pgfkeysvalueof{/gsb/chorusheading} \rep{#1})}
+  \fi
+  \lessspace
   %\@endverse
 }
 
