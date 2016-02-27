@@ -11,6 +11,7 @@
 \newif\ifgsb@authorindex
 \newif\ifgsb@isafour
 \newif\ifgsb@isprint
+\newif\ifgsb@bcorset
 
 \pgfkeys{
   /gsb/options/.cd,
@@ -27,7 +28,9 @@
   screena4/.style={size=a4, type=screen},
   screena5/.style={size=a5, type=screen},
   authorindex/.is if=gsb@authorindex,
-  authorindex=true
+  authorindex=true,
+  @bcor/.initial=0.5mm, % necessary to separate value and code
+  bcor/.code={\gsb@bcorsettrue\pgfkeyssetvalue{/gsb/options/@bcor}{#1}}
 }
 
 \ProcessPgfOptions{/gsb/options}
@@ -42,7 +45,7 @@
     \RequirePackage[chorded]{songs}
     \RequirePackage[bookmarks, hidelinks]{hyperref}
 
-    \setbinding{0.5cm}
+    \setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
     \setlrmarginsandblock{21mm}{*}{2}
     \setulmarginsandblock{20mm}{*}{1}
 
@@ -54,6 +57,7 @@
     \RequirePackage[chorded]{songs}
     \RequirePackage{hyperref}
 
+    \ifgsb@bcorset\setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}\fi
     \setlrmarginsandblock{*}{21mm}{1}
     \setulmarginsandblock{*}{29.7mm}{1}
 
@@ -66,7 +70,7 @@
     \RequirePackage[chorded, onesongcolumn]{songs}
     \RequirePackage[bookmarks, hidelinks]{hyperref}
 
-    \setbinding{5mm}
+    \setbinding{\pgfkeysvalueof{/gsb/@bcor}}
     \setheadfoot{0mm}{0cm}
     \setlrmarginsandblock{15mm}{*}{2}
     \setulmarginsandblock{10mm}{*}{1.3}
@@ -167,14 +171,14 @@
 \newchords{verse}
 \newchords{chorus}
 
-\newif\iffirstchorus
-\firstchorustrue
-\newif\iffirstverse
-\firstversetrue
+\newif\ifgsb@firstchorus
+\gsb@firstchorustrue
+\newif\ifgsb@firstverse
+\gsb@firstversetrue
 
 \gsb@addtosongsetup{
-  \global\firstchorustrue
-  \global\firstversetrue
+  \global\gsb@firstchorustrue
+  \global\gsb@firstversetrue
 }
 
 
@@ -186,22 +190,22 @@
 
 \newcommand{\gsb@beginchorus}{%
   \@beginchorus%
-  \iffirstchorus%
+  \ifgsb@firstchorus%
     \memorize[chorus]%
     \musicnote{\pgfkeysvalueof{/gsb/chorusheading}:}%
   \else%
     \replay[chorus]%
   \fi%
-  \global\firstchorusfalse%
+  \global\gsb@firstchorusfalse%
 }
 \long\def\gsb@namedchorus[#1]{%
   \@beginchorus%
-  \iffirstchorus%
+  \ifgsb@firstchorus%
     \memorize[chorus]%
   \else%
     \replay[chorus]%
   \fi%
-  \global\firstchorusfalse%
+  \global\gsb@firstchorusfalse%
   \def\param{#1}
   \ifx\param\@empty\else\musicnote{#1}\fi%
 }
@@ -237,12 +241,12 @@
 \renewenvironment{verse}[1][]{%
   \def\param{#1}%
   \vnumberedtrue\SB@beginverse%
-  \iffirstverse%
+  \ifgsb@firstverse%
     \memorize[verse]%
   \else%
     \replay[verse]%
   \fi%
-  \global\firstversefalse%
+  \global\gsb@firstversefalse%
   \ifx\param\@empty\else%
     \musicnote{#1}%
   \fi%
