@@ -280,8 +280,9 @@
 
 % unnumbered verse, suited for putting only chords into it
 \newenvironment{instrumental}[1]{%
+  \def\param{#1}
   \@beginverse*
-  \musicnote{#1}
+  \ifx\param\@empty\else\musicnote{#1}\fi
   \vspace{-0.1\baselineskip}
   \nolyrics
   \singlespacing
