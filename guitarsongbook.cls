@@ -12,6 +12,7 @@
 \newif\ifgsb@isafour
 \newif\ifgsb@isprint
 \newif\ifgsb@bcorset
+\newif\ifgsb@indexbypage
 
 \pgfkeys{
   /gsb/options/.cd,
@@ -29,6 +30,10 @@
   screena5/.style={size=a5, type=screen},
   authorindex/.is if=gsb@authorindex,
   authorindex=true,
+  indexsongsas/.is choice,
+  indexsongsas/page/.code=\gsb@indexbypagetrue,
+  indexsongsas/number/.code=\gsb@indexbypagefalse,
+  indexsongsas=number,
   @bcor/.initial=0.5mm, % necessary to separate value and code
   bcor/.code={\gsb@bcorsettrue\pgfkeyssetvalue{/gsb/options/@bcor}{#1}}
 }
@@ -108,7 +113,9 @@
 % indexing
 \pgfkeys{/gsb/titleindextitle/.initial=Songs}
 \newindex{titleidx}{songindex}
-\indexsongsas{titleidx}{\thepage} % reference songs by page, not number
+\ifgsb@indexbypage
+  \indexsongsas{titleidx}{\thepage} % reference songs by page, not number
+\fi
 \newcommand{\maketitleindex}{\showindex{\pgfkeysvalueof{/gsb/titleindextitle}}{titleidx}}
 
 \ifgsb@authorindex%
