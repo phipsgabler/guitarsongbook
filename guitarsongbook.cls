@@ -11,6 +11,7 @@
 \newif\ifgsb@authorindex
 \newif\ifgsb@isafour
 \newif\ifgsb@isprint
+\newif\ifgsb@bcorset
 
 \pgfkeys{
   /gsb/options/.cd,
@@ -27,7 +28,9 @@
   screena4/.style={size=a4, type=screen},
   screena5/.style={size=a5, type=screen},
   authorindex/.is if=gsb@authorindex,
-  authorindex=true
+  authorindex=true,
+  @bcor/.initial=0.5mm, % necessary to separate value and code
+  bcor/.code={\gsb@bcorsettrue\pgfkeyssetvalue{/gsb/options/@bcor}{#1}}
 }
 
 \ProcessPgfOptions{/gsb/options}
@@ -42,7 +45,7 @@
     \RequirePackage[chorded]{songs}
     \RequirePackage[bookmarks, hidelinks]{hyperref}
 
-    \setbinding{0.5cm}
+    \setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
     \setlrmarginsandblock{21mm}{*}{2}
     \setulmarginsandblock{20mm}{*}{1}
 
@@ -54,6 +57,7 @@
     \RequirePackage[chorded]{songs}
     \RequirePackage{hyperref}
 
+    \ifgsb@bcorset\setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}\fi
     \setlrmarginsandblock{*}{21mm}{1}
     \setulmarginsandblock{*}{29.7mm}{1}
 
@@ -66,7 +70,7 @@
     \RequirePackage[chorded, onesongcolumn]{songs}
     \RequirePackage[bookmarks, hidelinks]{hyperref}
 
-    \setbinding{5mm}
+    \setbinding{\pgfkeysvalueof{/gsb/@bcor}}
     \setheadfoot{0mm}{0cm}
     \setlrmarginsandblock{15mm}{*}{2}
     \setulmarginsandblock{10mm}{*}{1.3}
@@ -101,10 +105,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COMMANDS
 
-% always provide default memoization registers
-\newchords{verse}
-\newchords{chorus}
-
 % indexing
 \pgfkeys{/gsb/titleindextitle/.initial=Songs}
 \newindex{titleidx}{songindex}
@@ -127,9 +127,30 @@
 \fi
 
 
+% add ability to add setup code to each song
+\def\gsb@songsetup{\@empty}
+\def\gsb@addtosongsetup#1{
+  \let\oldsongsetup=\gsb@songsetup
+  \gdef\gsb@songsetup{\oldsongsetup #1}
+}
+
+\let\oldSB@@@beginsong=\SB@@@beginsong
+\renewcommand{\SB@@@beginsong}{%
+  \oldSB@@@beginsong
+  \gsb@songsetup
+}
+
+
 % helper commands, easier definitions
-\newcommand{\verseskip}{\par\vspace{0.5\baselineskip}}
-\newcommand{\chordcorrection}{\vspace{-0.5\baselineskip}\brk}
+\newcommand{\morespace}{\vspace{0.5\baselineskip}}
+\newcommand{\verseskip}{\par\morespace}
+\newcommand{\lessspace}{\vspace{-0.5\baselineskip}}
+\newcommand{\chordcorrection}{\lessspace\brk}
+\newcommand{\singlespacing}{%
+  \let\@oldbaselineskip\baselineskip
+  \setlength{\baselineskip}{0.6\@oldbaselineskip}
+}
+
 \newcommand{\chord}[1]{\textsc{\textbf{#1}}}
 \newcommand{\chords}[1]{\nolyrics #1}
 
@@ -146,58 +167,111 @@
 \let\@beginverse\beginverse
 \let\@endverse\endverse
 
+% we always provide default memoization registers
+\newchords{verse}
+\newchords{chorus}
+
+\newif\ifgsb@firstchorus
+\gsb@firstchorustrue
+\newif\ifgsb@firstverse
+\gsb@firstversetrue
+
+\gsb@addtosongsetup{
+  \global\gsb@firstchorustrue
+  \global\gsb@firstversetrue
+}
+
+
 
 % The chorus environment gets an optional "header", and automatic
 % replay of the chords of the first chorus
-\newcommand{\gsb@beginchorus}{\@beginchorus\replay[chorus]}
+% automatically give default header to chorus, and memorize separately
+\pgfkeys{/gsb/chorusheading/.initial={Refrain}}
+
+\newcommand{\gsb@beginchorus}{%
+  \@beginchorus%
+  \ifgsb@firstchorus%
+    \memorize[chorus]%
+    \musicnote{\pgfkeysvalueof{/gsb/chorusheading}:}%
+  \else%
+    \replay[chorus]%
+  \fi%
+  \global\gsb@firstchorusfalse%
+}
 \long\def\gsb@namedchorus[#1]{%
-  \gsb@beginchorus
-  \musicnote{#1}
-}
-\renewcommand{\beginchorus}{%
-  \@ifnextchar[{\gsb@namedchorus}{\gsb@beginchorus}
-}
-\renewenvironment{chorus}[1][]{%
+  \@beginchorus%
+  \ifgsb@firstchorus%
+    \memorize[chorus]%
+  \else%
+    \replay[chorus]%
+  \fi%
+  \global\gsb@firstchorusfalse%
   \def\param{#1}
-  \ifx\param\@empty
-    \gsb@beginchorus
-  \else
-    \gsb@namedchorus[#1]
-  \fi
+  \ifx\param\@empty\else\musicnote{#1}\fi%
+}
+% \renewcommand{\beginchorus}{%
+%   \@ifnextchar[{%
+%     \gsb@namedchorus%
+%   }{%
+%     \gsb@beginchorus%
+%   }
+% }
+\renewenvironment{chorus}[1][]{%
+  \def\param{#1}%
+  \ifx\param\@empty%
+    \gsb@beginchorus%
+  \else%
+    \gsb@namedchorus[#1]%
+  \fi%
 }{%
   \SB@endchorus
 }
 
-% Numbered verses are automatically memorized
-\renewcommand{\beginverse}{%
-  \begingroup%
-    \SB@loadactives%
-    \@ifstar{\endgroup\vnumberedfalse\SB@beginverse}%
-            {\endgroup\vnumberedtrue\SB@beginverse\memorize}%
+
+% Automatic memoization in verse environments:
+% \renewcommand{\beginverse}{%
+%   \begingroup%
+%     \SB@loadactives%
+%     \@ifstar{%
+%       \endgroup\vnumberedfalse\SB@beginverse%
+%     }{%
+%       \endgroup\vnumberedtrue\SB@beginverse%
+%     }%
+% }
+\renewenvironment{verse}[1][]{%
+  \def\param{#1}%
+  \vnumberedtrue\SB@beginverse%
+  \ifgsb@firstverse%
+    \memorize[verse]%
+  \else%
+    \replay[verse]%
+  \fi%
+  \global\gsb@firstversefalse%
+  \ifx\param\@empty\else%
+    \musicnote{#1}%
+  \fi%
+}{%
+  \SB@endverse
 }
-\renewenvironment{verse}
-  {\vnumberedtrue\SB@beginverse\memorize}
-  {\SB@endverse}
-\renewenvironment{verse*}
-  {\vnumberedfalse\SB@beginverse}
-  {\SB@endverse}
+
+\renewenvironment{verse*}[1][]{%
+  \def\param{#1}%
+  \vnumberedfalse\SB@beginverse%
+  \ifx\param\@empty\else%
+    \musicnote{#1}%
+  \fi%
+}{
+  \SB@endverse
+}
 
 
 % Some convenience commands for common use cases:
 
-% automatically give default header to chorus
-\pgfkeys{/gsb/chorusheading/.initial={Refrain}}
-\newcommand{\beginfirstchorus}{
-  \gsb@beginchorus\memorize[chorus]
-  \musicnote{\pgfkeysvalueof{/gsb/chorusheading}:}
-}
-\newenvironment{firstchorus}{\beginfirstchorus}{\@endchorus}
-
 % unnumbered verse, suited for putting tabs into it
 \pgfkeys{/gsb/tabsheading/.initial={Verwendete Akkorde:}}
 \newenvironment{tabs}{%
-  \@beginverse*
-  \musicnote{\pgfkeysvalueof{/gsb/tabsheading}}
+  \@beginverse*%
+  \musicnote{\pgfkeysvalueof{/gsb/tabsheading}}%
   %\vspace{-0.3\baselineskip}
 }{%
   \vspace{-0.3\baselineskip}
@@ -206,23 +280,27 @@
 
 % unnumbered verse, suited for putting only chords into it
 \newenvironment{instrumental}[1]{%
+  \def\param{#1}
   \@beginverse*
-  \musicnote{#1}
+  \ifx\param\@empty\else\musicnote{#1}\fi
   \vspace{-0.1\baselineskip}
   \nolyrics
-  \let\@oldbaselineskip\baselineskip
-  \setlength{\baselineskip}{0.6\@oldbaselineskip}
+  \singlespacing
 }{%
   \vspace{-0.3\baselineskip}
   \@endverse
 }
 
 % repeats with default chorus header
-\newcommand{\repeatchorus}{
-  \@beginverse*
-  \musicnote{(\pgfkeysvalueof{/gsb/chorusheading})}
-  \vspace{-0.5\baselineskip}
-  \@endverse
+\newcommand{\repeatchorus}[1][]{
+  \def\param{#1}
+  \ifx\param\@empty
+    \musicnote{(\pgfkeysvalueof{/gsb/chorusheading})}
+  \else
+    \musicnote{(\pgfkeysvalueof{/gsb/chorusheading} \rep{#1})}
+  \fi
+  \lessspace
+  %\@endverse
 }
 
 \endinput
