@@ -116,7 +116,15 @@
 \ifgsb@indexbypage
   \indexsongsas{titleidx}{\thepage} % reference songs by page, not number
 \fi
-\newcommand{\maketitleindex}{\showindex{\pgfkeysvalueof{/gsb/titleindextitle}}{titleidx}}
+
+\newcommand{\maketitleindex}{%
+  \showindex{%
+    \texorpdfstring{%
+      \protect\hypertarget{gsb@titleindex}{\pgfkeysvalueof{/gsb/titleindextitle}}%
+    }{%
+      \pgfkeysvalueof{/gsb/titleindextitle}%
+    }}{titleidx}
+}
 
 \ifgsb@authorindex%
   \pgfkeys{/gsb/authorindextitle/.initial=Interpreten}
@@ -132,6 +140,10 @@
   \let\@oldendsongs\endsongs
   \renewenvironment{songs}{\@oldbeginsongs{titleidx}}{\@oldendsongs}
 \fi
+
+% reverse link to index from each song number
+\let\gsb@oldprintsongnum\printsongnum
+\renewcommand{\printsongnum}[1]{\hyperlink{gsb@titleindex}{\gsb@oldprintsongnum{#1}}}
 
 
 % add ability to add setup code to each song
