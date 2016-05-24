@@ -48,7 +48,7 @@
     \typeout{printa4}
     \LoadClass[a4paper, twoside, 10pt]{memoir}
     \RequirePackage[chorded]{songs}
-    \RequirePackage[bookmarks, hidelinks]{hyperref}
+    \RequirePackage[hidelinks]{hyperref}
 
     \setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
     \setlrmarginsandblock{21mm}{*}{2}
@@ -74,7 +74,7 @@
     \typeout{printa5}
     \LoadClass[a5paper, twoside, 11pt]{memoir}
     \RequirePackage[chorded, onesongcolumn]{songs}
-    \RequirePackage[bookmarks, hidelinks]{hyperref}
+    \RequirePackage[hidelinks]{hyperref}
 
     \setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
     \setheadfoot{0mm}{0cm}
@@ -88,21 +88,21 @@
     \renewcommand{\notefont}{\footnotesize}
   \else% % screen-A5: intended for mobile reading
     \typeout{screena5}
-    \PackageError{guitarsongbook}{screen-a5 is not yet implemented!}{Nothing you can do...}
-    % \LoadClass[a5paper, twoside, 11pt]{memoir}
-    % \RequirePackage[chorded, onesongcolumn]{songs}
-    % \RequirePackage[bookmarks, hidelinks]{hyperref}
+    %\PackageError{guitarsongbook}{screen-a5 is not yet implemented!}{Nothing you can do...}
+    \LoadClass[a5paper, oneside, 11pt]{memoir}
+    \RequirePackage[chorded, onesongcolumn]{songs}
+    \RequirePackage{hyperref}
 
-    % %\setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
-    % \setheadfoot{0mm}{0cm}
-    % \setlrmarginsandblock{15mm}{*}{1}
-    % \setulmarginsandblock{10mm}{*}{1}
+    %\setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
+    \setheadfoot{0mm}{0cm}
+    \setlrmarginsandblock{15mm}{*}{1}
+    \setulmarginsandblock{10mm}{*}{1}
 
-    % % adapt size of chord symbols
-    % \renewcommand{\printchord}[1]{\small\sffamily\scshape\bfseries#1}
+    % adapt size of chord symbols
+    \renewcommand{\printchord}[1]{\small\sffamily\scshape\bfseries#1}
 
-    % % decrease size of text/musicnotes
-    % \renewcommand{\notefont}{\footnotesize}
+    % decrease size of text/musicnotes
+    \renewcommand{\notefont}{\footnotesize}
   \fi%
 \fi%
 
