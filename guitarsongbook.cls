@@ -44,7 +44,7 @@
 % PACKAGES AND SETTINGS
 
 \ifgsb@isafour%
-  \ifgsb@isprint% % sceen-A4
+  \ifgsb@isprint% % sceen-A4: intended for desktop reading
     \typeout{printa4}
     \LoadClass[a4paper, twoside, 10pt]{memoir}
     \RequirePackage[chorded]{songs}
@@ -62,6 +62,7 @@
     \RequirePackage[chorded]{songs}
     \RequirePackage{hyperref}
 
+    % in screen mode, we can _override_ the bcor, but will not set it by default
     \ifgsb@bcorset\setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}\fi
     \setlrmarginsandblock{*}{21mm}{1}
     \setulmarginsandblock{*}{29.7mm}{1}
@@ -75,7 +76,7 @@
     \RequirePackage[chorded, onesongcolumn]{songs}
     \RequirePackage[bookmarks, hidelinks]{hyperref}
 
-    \setbinding{\pgfkeysvalueof{/gsb/@bcor}}
+    \setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
     \setheadfoot{0mm}{0cm}
     \setlrmarginsandblock{15mm}{*}{2}
     \setulmarginsandblock{10mm}{*}{1.3}
@@ -85,9 +86,23 @@
 
     % decrease size of text/musicnotes
     \renewcommand{\notefont}{\footnotesize}
-  \else% % screen-A5
+  \else% % screen-A5: intended for mobile reading
     \typeout{screena5}
-    \PackageError{guitarsongbook}{Option `screena5' not yet implemented}{}
+    \PackageError{guitarsongbook}{screen-a5 is not yet implemented!}{Nothing you can do...}
+    % \LoadClass[a5paper, twoside, 11pt]{memoir}
+    % \RequirePackage[chorded, onesongcolumn]{songs}
+    % \RequirePackage[bookmarks, hidelinks]{hyperref}
+
+    % %\setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
+    % \setheadfoot{0mm}{0cm}
+    % \setlrmarginsandblock{15mm}{*}{1}
+    % \setulmarginsandblock{10mm}{*}{1}
+
+    % % adapt size of chord symbols
+    % \renewcommand{\printchord}[1]{\small\sffamily\scshape\bfseries#1}
+
+    % % decrease size of text/musicnotes
+    % \renewcommand{\notefont}{\footnotesize}
   \fi%
 \fi%
 
