@@ -34,36 +34,49 @@
   indexsongsas/page/.code=\gsb@indexbypagetrue,
   indexsongsas/number/.code=\gsb@indexbypagefalse,
   indexsongsas=number,
-  @bcor/.initial=0.5mm, % necessary to separate value and code
-  bcor/.code={\gsb@bcorsettrue\pgfkeyssetvalue{/gsb/options/@bcor}{#1}}
+  bcor/.code={\pgfkeyssetvalue{/gsb/options/bcor}{#1}},
+  fontsize/.code={\pgfkeyssetvalue{/gsb/options/fontsize}{#1}}
 }
 
 \ProcessPgfOptions{/gsb/options}
+
+\newcommand{\pgf@getordefault}[2]{\pgfkeysifdefined{#1}{\pgfkeysvalueof{#1}}{#2}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PACKAGES AND SETTINGS
 
 \ifgsb@isafour%
-  \ifgsb@isprint% % sceen-A4: intended for desktop reading
+  \ifgsb@isprint% % print-A4
     \typeout{printa4}
-    \LoadClass[a4paper, twoside, 10pt]{memoir}
+
+    \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{10pt}}{memoir}
+    \LoadClass[a4paper, twoside]{memoir}
+
     \RequirePackage[chorded]{songs}
     \RequirePackage[hidelinks]{hyperref}
 
-    \setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
+    \pgfkeysifdefined{/gsb/options/bcor}{%
+      \setbinding{\pgfkeysvalueof{/gsb/options/bcor}}
+    }{%
+      \setbinding{0.5cm}
+    }
     \setlrmarginsandblock{21mm}{*}{2}
     \setulmarginsandblock{20mm}{*}{1}
 
     % customize look of chord symbols
     \renewcommand{\printchord}[1]{\sffamily\scshape\bfseries#1}
-  \else% % sceen-A4
+  \else% % sceen-A4: intended for desktop reading
     \typeout{screena4}
-    \LoadClass[a4paper, oneside, 10pt]{memoir}
+
+    \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{10pt}}{memoir}
+    \LoadClass[a4paper, oneside]{memoir}
+
     \RequirePackage[chorded]{songs}
     \RequirePackage{hyperref}
 
-    % in screen mode, we can _override_ the bcor, but will not set it by default
-    \ifgsb@bcorset\setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}\fi
+    \pgfkeysifdefined{/gsb/options/bcor}{%
+      \setbinding{\pgfkeysvalueof{/gsb/options/bcor}}
+    }{}
     \setlrmarginsandblock{*}{21mm}{1}
     \setulmarginsandblock{*}{29.7mm}{1}
 
@@ -72,12 +85,17 @@
 \else%
   \ifgsb@isprint% % print-A5
     \typeout{printa5}
-    \LoadClass[a5paper, twoside, 11pt]{memoir}
+
+    \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{10pt}}{memoir}
+    \LoadClass[a5paper, twoside]{memoir}
+
     \RequirePackage[chorded, onesongcolumn]{songs}
     \RequirePackage[hidelinks]{hyperref}
 
-    \setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
-    \setheadfoot{0mm}{0cm}
+    \pgfkeysifdefined{/gsb/options/bcor}{%
+      \setbinding{\pgfkeysvalueof{/gsb/options/bcor}}
+    }{}
+    \setheadfoot{0mm}{0mm}
     \setlrmarginsandblock{15mm}{*}{2}
     \setulmarginsandblock{10mm}{*}{1.3}
 
@@ -88,13 +106,17 @@
     \renewcommand{\notefont}{\footnotesize}
   \else% % screen-A5: intended for mobile reading
     \typeout{screena5}
-    %\PackageError{guitarsongbook}{screen-a5 is not yet implemented!}{Nothing you can do...}
-    \LoadClass[a5paper, oneside, 11pt]{memoir}
+
+    \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{12pt}}{memoir}
+    \LoadClass[a5paper, oneside]{memoir}
+
     \RequirePackage[chorded, onesongcolumn]{songs}
     \RequirePackage{hyperref}
 
-    %\setbinding{\pgfkeysvalueof{/gsb/options/@bcor}}
-    \setheadfoot{0mm}{0cm}
+    \pgfkeysifdefined{/gsb/options/bcor}{%
+      \setbinding{\pgfkeysvalueof{/gsb/options/bcor}}
+    }{}
+    \setheadfoot{0mm}{0mm}
     \setlrmarginsandblock{15mm}{*}{1}
     \setulmarginsandblock{10mm}{*}{1}
 
