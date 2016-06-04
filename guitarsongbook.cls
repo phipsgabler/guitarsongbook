@@ -98,9 +98,8 @@
     \pgfkeysifdefined{/gsb/options/bcor}{%
       \setbinding{\pgfkeysvalueof{/gsb/options/bcor}}
     }{}
-    \setheadfoot{0mm}{0mm}
     \setlrmarginsandblock{15mm}{*}{2}
-    \setulmarginsandblock{10mm}{*}{1.3}
+    \setulmarginsandblock{15mm}{*}{1.3}
 
     % adapt size of chord symbols
     \renewcommand{\printchord}[1]{\small\sffamily\scshape\bfseries#1}
@@ -120,9 +119,8 @@
     \pgfkeysifdefined{/gsb/options/bcor}{%
       \setbinding{\pgfkeysvalueof{/gsb/options/bcor}}
     }{}
-    \setheadfoot{0mm}{0mm}
-    \setlrmarginsandblock{15mm}{*}{1}
-    \setulmarginsandblock{10mm}{*}{1}
+    \setlrmarginsandblock{*}{15mm}{1}
+    \setulmarginsandblock{*}{15mm}{1}
 
     % adapt size of chord symbols
     \renewcommand{\printchord}[1]{\small\sffamily\scshape\bfseries#1}
