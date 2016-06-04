@@ -52,6 +52,7 @@
     \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{10pt}}{memoir}
     \LoadClass[a4paper, twoside]{memoir}
 
+    \RequirePackage{xcolor}
     \RequirePackage[chorded]{songs}
     \RequirePackage[hidelinks]{hyperref}
 
@@ -71,6 +72,7 @@
     \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{10pt}}{memoir}
     \LoadClass[a4paper, oneside]{memoir}
 
+    \RequirePackage{xcolor}
     \RequirePackage[chorded]{songs}
     \RequirePackage{hyperref}
 
@@ -89,6 +91,7 @@
     \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{10pt}}{memoir}
     \LoadClass[a5paper, twoside]{memoir}
 
+    \RequirePackage{xcolor}
     \RequirePackage[chorded, onesongcolumn]{songs}
     \RequirePackage[hidelinks]{hyperref}
 
@@ -110,6 +113,7 @@
     \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{12pt}}{memoir}
     \LoadClass[a5paper, oneside]{memoir}
 
+    \RequirePackage{xcolor}
     \RequirePackage[chorded, onesongcolumn]{songs}
     \RequirePackage{hyperref}
 
