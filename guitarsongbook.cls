@@ -358,7 +358,17 @@
     \musicnote{(\pgfkeysvalueof{/gsb/chorusheading} \rep{#1})}
   \fi
   \lessspace
-  %\@endverse
+}
+
+% repeats with default chorus header
+\newcommand{\repeatstuff}[2][]{
+  \def\param{#1}
+  \ifx\param\@empty
+    \musicnote{(#2)}
+  \else
+    \musicnote{(#2 \rep{#1})}
+  \fi
+  \lessspace
 }
 
 \endinput
