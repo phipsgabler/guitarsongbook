@@ -270,7 +270,8 @@
   \end{tikzpicture}%
 }
 
-% set up a page style printing the index tab on every recto page
+% set up a page style printing the index tab on every recto page. 
+% this is set up so that groups of the form (11-20) etc. are used.
 \copypagestyle{plainwiththumbs}{plain}
 \makeoddhead{plainwiththumbs}{}{}{%
   \pgfmathtruncatemacro{\@actualsongnum}{\thesongnum-1}
