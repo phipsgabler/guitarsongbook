@@ -13,6 +13,7 @@
 \newif\ifgsb@isprint
 \newif\ifgsb@bcorset
 \newif\ifgsb@indexbypage
+\newif\ifgsb@thumbindex
 
 \pgfkeys{
   /gsb/options/.cd,
@@ -35,7 +36,9 @@
   indexsongsas/number/.code=\gsb@indexbypagefalse,
   indexsongsas=number,
   bcor/.code={\pgfkeyssetvalue{/gsb/options/bcor}{#1}},
-  fontsize/.code={\pgfkeyssetvalue{/gsb/options/fontsize}{#1}}
+  fontsize/.code={\pgfkeyssetvalue{/gsb/options/fontsize}{#1}},
+  thumbindex/.is if=gsb@thumbindex,
+  thumbindex=false
 }
 
 \ProcessPgfOptions{/gsb/options}
@@ -134,6 +137,7 @@
 % other packages
 \RequirePackage[type1,sflf]{libertine} % change to a nicer font
 \RequirePackage{amsmath}               % some special symbols are needed
+\RequirePackage{tikz}
 
 
 % global style changes
@@ -172,12 +176,15 @@
   \gdef\makeauthorindex{\showindex{\pgfkeysvalueof{/gsb/authorindextitle}}{authidx}}
   \let\@oldbeginsongs\songs
   \let\@oldendsongs\endsongs
-  \renewenvironment{songs}{\@oldbeginsongs{titleidx,authidx}}{\@oldendsongs}
+  \renewenvironment{songs}{%
+    % here, we also set the page style, which enables thumb indexes
+    \pagestyle{\gsb@songpagestyle}\@oldbeginsongs{titleidx,authidx}}{\@oldendsongs}
 \else%
   \gdef\makeauthorindex{}
   \let\@oldbeginsongs\songs
   \let\@oldendsongs\endsongs
-  \renewenvironment{songs}{\@oldbeginsongs{titleidx}}{\@oldendsongs}
+  \renewenvironment{songs}{%
+    \pagestyle{\gsb@songpagestyle}\@oldbeginsongs{titleidx}}{\@oldendsongs}
 \fi
 
 % reverse link to index from each song number
@@ -215,6 +222,70 @@
 
 \newcommand{\lrepeat}{\ensuremath{\lVert:}}
 \newcommand{\rrepeat}{\ensuremath{:\rVert}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% thumb index
+
+% a shameless clone of fancytabs' command (http://www.ctan.org/pkg/fancytabs),
+% with some customizations made
+\ifgsb@isafour
+  \newcommand{\gsb@tab@style}{\Large}
+  \newlength{\gsb@tab@height}
+  \settowidth{\gsb@tab@height}{\Large{100--100}}
+  \addtolength{\gsb@tab@height}{1mm}
+  \newlength{\gsb@tab@top}
+  \setlength{\gsb@tab@top}{1.5\uppermargin}
+\else
+  \newcommand{\gsb@tab@style}{\normalsize}
+  \newlength{\gsb@tab@height}
+  \settowidth{\gsb@tab@height}{100--100}
+  \addtolength{\gsb@tab@height}{1mm}
+  \newlength{\gsb@tab@top}
+  \setlength{\gsb@tab@top}{\uppermargin}
+\fi
+\newlength{\gsb@tab@width}
+\setlength{\gsb@tab@width}{2em}
+\newcommand{\gsb@tab@count}{15}
+\newcommand{\gsb@tab@leftcolor}{white}
+\newcommand{\gsb@tab@rightcolor}{gray!50}
+
+% argument #1: text (displayed vertically)
+% argument #2: position (offset from top)
+\newcommand{\gsb@indextab}[2]{%
+  \begin{tikzpicture}[remember picture,overlay]%
+    \node[yshift={-1*(\the\gsb@tab@top
+                     +\the\gsb@tab@height/2
+                     +mod(#2-1,\gsb@tab@count)*\the\gsb@tab@height
+                     )},
+          xshift=-0.5*\the\gsb@tab@width]
+      at (current page.north east) {
+      \tikz\shade[shading=axis,bottom color=\gsb@tab@leftcolor,
+                  top color=\gsb@tab@rightcolor,shading angle=-90]
+        (0,0) rectangle (\the\gsb@tab@width,\the\gsb@tab@height)
+          node[rotate=0]
+            at (0.5*\the\gsb@tab@width,0.5*\the\gsb@tab@height)
+            {\rotatebox{90}{\gsb@tab@style#1}};%
+    };%
+  \end{tikzpicture}%
+}
+
+% set up a page style printing the index tab on every recto page
+\copypagestyle{plainwiththumbs}{plain}
+\makeoddhead{plainwiththumbs}{}{}{%
+  \pgfmathtruncatemacro{\@actualsongnum}{\thesongnum-1}
+  \pgfmathtruncatemacro{\@currentsongrangebegin}{floor((\@actualsongnum-1)/10)*10+1}
+  \pgfmathtruncatemacro{\@currentsongrangeend}{\@currentsongrangebegin+9}
+  \gsb@indextab{\@currentsongrangebegin--\@currentsongrangeend}{floor(\@actualsongnum/10)}
+}
+
+% only apply this style when required
+\ifgsb@thumbindex
+  \gdef\gsb@songpagestyle{plainwiththumbs}
+\else
+  \gdef\gsb@songpagestyle{plain}
+\fi
+  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % modifications and extensions of verse and chord commands
@@ -360,7 +431,7 @@
   \lessspace
 }
 
-% repeats with default chorus header
+% repeat other stuff (eg. intros, solos)
 \newcommand{\repeatstuff}[2][]{
   \def\param{#1}
   \ifx\param\@empty
