@@ -294,7 +294,7 @@
         \pgfmathtruncatemacro{\@actualsongnum}{\thesongnum-1}
         \pgfmathtruncatemacro{\@currentsongrangebegin}{floor((\@actualsongnum-1)/10)*10+1}
         \pgfmathtruncatemacro{\@currentsongrangeend}{\@currentsongrangebegin+9}
-        \gsb@indextab{\@currentsongrangebegin--\@currentsongrangeend}{floor(\@actualsongnum/10)}
+        \gsb@indextab{\@currentsongrangebegin--\@currentsongrangeend}{floor((\@actualsongnum-1)/10)}
       \fi
     \fi
   }
