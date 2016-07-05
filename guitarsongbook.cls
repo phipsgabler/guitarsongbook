@@ -137,7 +137,8 @@
 % other packages
 \RequirePackage[type1,sflf]{libertine} % change to a nicer font
 \RequirePackage{amsmath}               % some special symbols are needed
-\RequirePackage{tikz}
+\RequirePackage{everypage}             % needed to separate thumb indices from page styles
+\RequirePackage{tikz}                  % well, tikz...
 
 
 % global style changes
@@ -177,14 +178,24 @@
   \let\@oldbeginsongs\songs
   \let\@oldendsongs\endsongs
   \renewenvironment{songs}{%
-    % here, we also set the page style, which enables thumb indexes
-    \pagestyle{\gsb@songpagestyle}\@oldbeginsongs{titleidx,authidx}}{\@oldendsongs}
+    % here, we also enable thumb indexes
+    \global\gsb@enablethumbstrue
+    \@oldbeginsongs{titleidx,authidx}
+  }{%
+    \@oldendsongs
+    \global\gsb@enablethumbsfalse
+  }
 \else%
   \gdef\makeauthorindex{}
   \let\@oldbeginsongs\songs
   \let\@oldendsongs\endsongs
   \renewenvironment{songs}{%
-    \pagestyle{\gsb@songpagestyle}\@oldbeginsongs{titleidx}}{\@oldendsongs}
+    \global\gsb@enablethumbstrue
+    \@oldbeginsongs{titleidx}
+  }{%
+    \@oldendsongs
+    \global\gsb@enablethumbsfalse
+  }
 \fi
 
 % reverse link to index from each song number
@@ -270,21 +281,23 @@
   \end{tikzpicture}%
 }
 
-% set up a page style printing the index tab on every recto page. 
-% this is set up so that groups of the form (11-20) etc. are used.
-\copypagestyle{plainwiththumbs}{plain}
-\makeoddhead{plainwiththumbs}{}{}{%
-  \pgfmathtruncatemacro{\@actualsongnum}{\thesongnum-1}
-  \pgfmathtruncatemacro{\@currentsongrangebegin}{floor((\@actualsongnum-1)/10)*10+1}
-  \pgfmathtruncatemacro{\@currentsongrangeend}{\@currentsongrangebegin+9}
-  \gsb@indextab{\@currentsongrangebegin--\@currentsongrangeend}{floor(\@actualsongnum/10)}
-}
+\newif\ifgsb@enablethumbs
+\gsb@enablethumbsfalse
 
-% only apply this style when required
+% set up printing the index tab on every recto page, if required by the class argument.
+% this is set up so that groups of the form (11-20) etc. are used.
 \ifgsb@thumbindex
-  \gdef\gsb@songpagestyle{plainwiththumbs}
-\else
-  \gdef\gsb@songpagestyle{plain}
+  \AddEverypageHook{
+    \ifgsb@enablethumbs
+      \checkoddpage
+      \ifoddpage
+        \pgfmathtruncatemacro{\@actualsongnum}{\thesongnum-1}
+        \pgfmathtruncatemacro{\@currentsongrangebegin}{floor((\@actualsongnum-1)/10)*10+1}
+        \pgfmathtruncatemacro{\@currentsongrangeend}{\@currentsongrangebegin+9}
+        \gsb@indextab{\@currentsongrangebegin--\@currentsongrangeend}{floor(\@actualsongnum/10)}
+      \fi
+    \fi
+  }
 \fi
   
 
