@@ -302,7 +302,13 @@
   
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% modifications and extensions of verse and chord commands
+% modifications and extensions of esisting commands
+
+% make capo text modifiable
+\pgfkeys{/gsb/capotext/.initial={Capo}}
+\renewcommand\capo[1]{%
+  \iftranscapos\transpose{#1}\else\musicnote{\pgfkeysvalueof{/gsb/capotext} #1}\fi%
+}
 
 % original top level (non-internal) definitions:
 \let\@beginchorus\beginchorus
