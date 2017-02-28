@@ -55,7 +55,7 @@
     \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{10pt}}{memoir}
     \LoadClass[a4paper, twoside]{memoir}
 
-    \RequirePackage{xcolor}
+    \RequirePackage[pdftex]{xcolor}
     \RequirePackage[chorded]{songs}
     \RequirePackage[hidelinks]{hyperref}
 
@@ -75,7 +75,7 @@
     \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{10pt}}{memoir}
     \LoadClass[a4paper, oneside]{memoir}
 
-    \RequirePackage{xcolor}
+    \RequirePackage[pdftex]{xcolor}
     \RequirePackage[chorded]{songs}
     \RequirePackage{hyperref}
 
@@ -94,7 +94,7 @@
     \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{10pt}}{memoir}
     \LoadClass[a5paper, twoside]{memoir}
 
-    \RequirePackage{xcolor}
+    \RequirePackage[pdftex]{xcolor}
     \RequirePackage[chorded, onesongcolumn]{songs}
     \RequirePackage[hidelinks]{hyperref}
 
@@ -115,7 +115,7 @@
     \PassOptionsToClass{\pgf@getordefault{/gsb/options/fontsize}{12pt}}{memoir}
     \LoadClass[a5paper, oneside]{memoir}
 
-    \RequirePackage{xcolor}
+    \RequirePackage[pdftex]{xcolor}
     \RequirePackage[chorded, onesongcolumn]{songs}
     \RequirePackage{hyperref}
 
@@ -294,7 +294,7 @@
         \pgfmathtruncatemacro{\@actualsongnum}{\thesongnum-1}
         \pgfmathtruncatemacro{\@currentsongrangebegin}{floor((\@actualsongnum-1)/10)*10+1}
         \pgfmathtruncatemacro{\@currentsongrangeend}{\@currentsongrangebegin+9}
-        \gsb@indextab{\@currentsongrangebegin--\@currentsongrangeend}{floor((\@actualsongnum-1)/10)}
+        \gsb@indextab{\@currentsongrangebegin--\@currentsongrangeend}{floor(\@actualsongnum/10)}
       \fi
     \fi
   }
@@ -302,13 +302,7 @@
   
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% modifications and extensions of esisting commands
-
-% make capo text modifiable
-\pgfkeys{/gsb/capotext/.initial={Capo}}
-\renewcommand\capo[1]{%
-  \iftranscapos\transpose{#1}\else\musicnote{\pgfkeysvalueof{/gsb/capotext} #1}\fi%
-}
+% modifications and extensions of verse and chord commands
 
 % original top level (non-internal) definitions:
 \let\@beginchorus\beginchorus
