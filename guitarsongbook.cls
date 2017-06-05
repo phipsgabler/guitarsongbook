@@ -14,6 +14,7 @@
 \newif\ifgsb@bcorset
 \newif\ifgsb@indexbypage
 \newif\ifgsb@thumbindex
+\newif\ifgsb@showframe
 
 \pgfkeys{
   /gsb/options/.cd,
@@ -38,7 +39,9 @@
   bcor/.code={\pgfkeyssetvalue{/gsb/options/bcor}{#1}},
   fontsize/.code={\pgfkeyssetvalue{/gsb/options/fontsize}{#1}},
   thumbindex/.is if=gsb@thumbindex,
-  thumbindex=false
+  thumbindex=false,
+  showframe/.is if=gsb@showframe,
+  showframe=false
 }
 
 \ProcessPgfOptions{/gsb/options}
@@ -61,12 +64,13 @@
 
     \pgfkeysifdefined{/gsb/options/bcor}{%
       \setbinding{\pgfkeysvalueof{/gsb/options/bcor}}
-    }{%
-      \setbinding{0.5cm}
-    }
-    \setlrmarginsandblock{21mm}{*}{2}
-    \setulmarginsandblock{20mm}{*}{1}
+    }{}
 
+    % this is an adaption of the ISO layout from Bringhurst, p. 175
+    \setlrmarginsandblock{19.1mm}{*}{2}
+    \setulmarginsandblock{19.1mm}{*}{2}
+    \setmarginnotes{1em}{19.1mm}{1em}
+    
     % customize look of chord symbols
     \renewcommand{\printchord}[1]{\sffamily\scshape\bfseries#1}
   \else% % sceen-A4: intended for desktop reading
@@ -78,12 +82,15 @@
     \RequirePackage[pdftex]{xcolor}
     \RequirePackage[chorded]{songs}
     \RequirePackage{hyperref}
-
+    
     \pgfkeysifdefined{/gsb/options/bcor}{%
       \setbinding{\pgfkeysvalueof{/gsb/options/bcor}}
     }{}
-    \setlrmarginsandblock{*}{21mm}{1}
-    \setulmarginsandblock{*}{29.7mm}{1}
+
+    % this is an adaption of the ISO layout from Bringhurst, p. 175
+    \setlrmarginsandblock{28.5mm}{*}{1}
+    \setulmarginsandblock{19.1mm}{*}{2}
+    \setmarginnotes{1em}{19.1mm}{1em}
 
     \renewcommand{\printchord}[1]{\sffamily\scshape\bfseries#1}
   \fi%
@@ -134,12 +141,16 @@
 \fi%
 
 
+
 % other packages
 \RequirePackage[type1,sflf]{libertine} % change to a nicer font
 \RequirePackage{amsmath}               % some special symbols are needed
 \RequirePackage{everypage}             % needed to separate thumb indices from page styles
 \RequirePackage{tikz}                  % well, tikz...
 
+\ifgsb@showframe
+  \RequirePackage{showframe}
+\fi
 
 % global style changes
 \renewcommand{\idxauthfont}{\idxtitlefont}
