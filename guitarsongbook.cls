@@ -167,7 +167,7 @@
 
 % indexing
 \pgfkeys{/gsb/titleindextitle/.initial=Liederverzeichnis}
-\newindex{titleidx}{songindex}
+\newindex{titleidx}{\jobname-titleindex}
 \ifgsb@indexbypage
   \indexsongsas{titleidx}{\thepage} % reference songs by page, not number
 \fi
@@ -183,7 +183,7 @@
 
 \ifgsb@authorindex%
   \pgfkeys{/gsb/authorindextitle/.initial=Interpretenverzeichnis}
-  \newauthorindex{authidx}{authorindex} % create indexing by authors
+  \newauthorindex{authidx}{\jobname-authorindex} % create indexing by authors
   \indexsongsas{authidx}{\thepage} % same here...
   \gdef\makeauthorindex{\showindex{\pgfkeysvalueof{/gsb/authorindextitle}}{authidx}}
   \let\@oldbeginsongs\songs
